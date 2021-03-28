@@ -1,0 +1,74 @@
+{% extends 'learnQuran/base.html' %}
+{% load static %}
+{% block css_o %}
+    <link href="{% static 'learnQuran/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block header %}
+<header class="masthead d-flex">
+    <div class="container text-center my-auto">
+      <h1 class="mb-1 text-light">Étudiants du jour</h1>
+    {% if stud %}
+      <div class="row no-gutters">
+          {% for e in stud %}
+        <div class="col-lg-6">
+          <a class="portfolio-item" href="#!">
+            <div class="caption">
+              <div class="caption-content col-10 mb-3 ml-md-5">
+                <div class="h2">{{ e.etudiant.prenom }} {{ e.etudiant.nom }}</div>
+                      <div class="progress">
+                          <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                      </div>
+              </div>
+            </div>
+              {% if e.etudiant.sexe != "Homme" %}
+            <img class="img-fluid" src="{% static 'learnQuran/img/Femme.png' %}" alt="">
+              {% else %}
+                  <img class="img-fluid" src="{% static 'learnQuran/img/Homme.png' %}" alt="">
+              {% endif %}
+          </a>
+        </div>
+          {% endfor %}
+      </div>
+
+        <hr>
+        <div class="hr"></div>
+      <a class="btn btn-primary btn-xl js-scroll-trigger" href="{% url 'learnQuran:calendar' %}">Voir le calendrier complet de la semaine</a>
+        {% else %}
+        <h1 class="mb-1 text-light">Oooops!!🤔🤔</h1>
+        <a class="btn btn-primary btn-xl js-scroll-trigger" href="{% url 'learnQuran:add' %}">Ajouter des etudiants</a>
+    {% endif %}
+    </div>
+    <div class="overlay"></div>
+  </header>
+{% endblock %}
+{% block content %}
+    <div class="container text-center">
+    <hr/>
+        <h2 class="text-black-50" id="liste">Liste des etudiants</h2>
+    <hr/>
+            <table class="table table-dark table-striped table-bordered m-10 p-3">
+                <thead class="thead-light">
+
+        <tr>
+            <th>Prenom</th>
+            <th>Nom</th>
+            <th>sexe</th>
+            <th>telephone</th>
+            <th>action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for s in liste_etudiant %}
+            <tr>
+            <td>{{ s.prenom }}</td>
+            <td>{{ s.nom }}</td>
+            <td>{{ s.sexe }}</td>
+            <td>{{ s.telephone }}</td>
+            <td><a class="btn btn--pill btn-outline-danger float-right" href="{% url 'learnQuran:delete_one' s.id %}"><i class="far fa-trash-alt"></a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+{% endblock %}

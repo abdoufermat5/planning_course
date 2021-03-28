@@ -109,9 +109,7 @@ def add(request):
 
 def deleteAll(request):
     Etudiant.objects.all().delete()
-    Calendrier.objects.all().delete()
     Schedule.objects.all().delete()
-    Progression.objects.all().delete()
     l = Etudiant.objects.all()
     res = []
     try:

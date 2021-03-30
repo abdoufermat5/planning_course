@@ -18,16 +18,25 @@ def week_of_month(dt):
     dom = dt.day
     adjusted_dom = dom + first_day.weekday()
 
-    return int(ceil(adjusted_dom/7.0))
+    return int(ceil(adjusted_dom/7.0)) - 1
 
 
 # Create your views here.
 def accueil(request):
+    first_day = datetime.weekday(datetime(2021, 4, 1))
+    s = { 0: 'Lundi', 1: 'Mardi', 2: 'Mercredi', 3: 'Jeudi', 4: 'Vendredi', 5: 'Samedi', 6: 'Dimanche' }
+    if datetime.now() < datetime(2021, 4, 1):
+        week = week_of_month(datetime(2021, 4, 1))
+        weekday = s.get(datetime.weekday(datetime(2021, 4, 1)))
+    else:
+        week = week_of_month(datetime.now())
+        
+        weekday = s.get(datetime.weekday(datetime.now()))
+    
     l = Etudiant.objects.all()
     res = []
     try:
-        
-        etudiants = Schedule.objects.filter(nx=datetime.weekday(datetime.now()))
+        etudiants = Schedule.objects.filter(calendrier=Calendrier.objects.get(jours=weekday), semaine=week)
         res = random.sample(list(etudiants), 2)
     except:
         pass

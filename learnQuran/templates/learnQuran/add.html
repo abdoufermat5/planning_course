@@ -128,12 +128,3 @@
     </table>
     </div>
 {% endblock %}
-{% block js_o %}
-    <script>
-    $("#delete").submit(function (e) {
-        // preventing from page reload and default actions
-        e.preventDefault();
-        alert("deleted successfully!")
-    })
-    </script>
-{% endblock %}

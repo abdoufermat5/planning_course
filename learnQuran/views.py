@@ -69,18 +69,28 @@ def add_calendar(request):
     semaine = [0, 1, 2, 3, 4]
     l = Etudiant.objects.all()
     calendars = Calendrier.objects.all()
+    Schedule.objects.all().delete()
+    if calendars.count() == 0:
+        s = ['Lundi', 'Mardi','Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
+        r = []
+        for x in s:
+            r.append(Calendrier(jours=x))
+        Calendrier.objects.bulk_create(r)
     
     for sem in semaine:
         n = Schedule.objects.all().count() // 2
         for c in calendars:
+            r = []
             for i in range(2):
                 e = random.sample(list(l), 1)
                 while Schedule.objects.filter(etudiant=e[0], semaine=n//7).count() >= 2:
                     e = random.sample(list(l), 1)
                 if Schedule.objects.filter(etudiant=e[0], semaine=n//7).count() <= 2:
                     if Schedule.objects.filter(etudiant=e[0], calendrier=c, nx=n).count() == 0:
-                        n_sched = Schedule(etudiant=e[0], calendrier=c, nx=n, semaine=n // 7)
-                        n_sched.save()
+                        r.append(Schedule(etudiant=e[0], calendrier=c, nx=n, semaine=n // 7))
+                        # n_sched = Schedule(etudiant=e[0], calendrier=c, nx=n, semaine=n // 7)
+                        # n_sched.save()
+            Schedule.objects.bulk_create(r)
             n += 1
     return redirect('learnQuran:calendar')
 

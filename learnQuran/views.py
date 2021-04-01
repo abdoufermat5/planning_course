@@ -84,7 +84,6 @@ def add_calendar(request):
 		for x in s:
 			r.append(Calendrier(jours=x))
 		Calendrier.objects.bulk_create(r)
-	
 	for sem in semaine:
 		e = list(combinations(l, 2))
 		random.shuffle(e)
@@ -92,35 +91,35 @@ def add_calendar(request):
 		for jours in calendars:
 			new_pair = []
 			hasard = random.choice(e)
-			while Schedule.objects.filter(etudiant=hasard[0],
-				                          semaine=sem).count() >= 2:
+			while Schedule.objects.filter(etudiant=hasard[0], semaine=sem).count() >= 2 or Schedule.objects.filter(
+					etudiant=hasard[1], semaine=sem).count() >= 2:
 				hasard = random.choice(e)
 			for elt in hasard:
 				new_pair.append(Schedule(calendrier=jours, etudiant=elt, nx=n, semaine=sem))
 			Schedule.objects.bulk_create(new_pair)
 			n += 1
-		
-		# for c in calendars:
-		#     cond = False
-		#     res = []
-		#
-		# while not cond:
-		#     if len(e) > 0:
-		#         r = list(e.pop())
-		#     else:
-		#         e = list(combinations(l, 2))
-		#         random.shuffle(e)
-		#         r = list(e.pop())
-		#     for elt in r:
-		#         if Schedule.objects.filter(etudiant=elt, semaine=n // 7).count() >= 2\
-		#                 or Schedule.objects.filter(etudiant=elt, semaine=n // 7, nx=n).count() == 2:
-		#             cond = False
-		#             break
-		#         else:
-		#             res.append(Schedule(etudiant=elt, calendrier=c, nx=n, semaine=n // 7))
-		#             cond = True
-		# Schedule.objects.bulk_create(res)
-		# n += 1
+	
+	# for c in calendars:
+	#     cond = False
+	#     res = []
+	#
+	# while not cond:
+	#     if len(e) > 0:
+	#         r = list(e.pop())
+	#     else:
+	#         e = list(combinations(l, 2))
+	#         random.shuffle(e)
+	#         r = list(e.pop())
+	#     for elt in r:
+	#         if Schedule.objects.filter(etudiant=elt, semaine=n // 7).count() >= 2\
+	#                 or Schedule.objects.filter(etudiant=elt, semaine=n // 7, nx=n).count() == 2:
+	#             cond = False
+	#             break
+	#         else:
+	#             res.append(Schedule(etudiant=elt, calendrier=c, nx=n, semaine=n // 7))
+	#             cond = True
+	# Schedule.objects.bulk_create(res)
+	# n += 1
 	return redirect('learnQuran:calendar')
 
 
